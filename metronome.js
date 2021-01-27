@@ -3,6 +3,18 @@ $(document).ready(function(){
     var bpm = 100;
     var beat = 4;
     const url = "Music/MetronomeShort.mp3";
+    const urls = ["A maj.mp3","A min.mp3","ASharp maj.mp3",
+                    "B maj.mp3","B min.mp3","C maj.mp3",
+                    "C min.mp3","CSharp maj.mp3",
+                    "CSharp min.mp3", "D maj.mp3",
+                    "D min.mp3", "DSharp maj.mp3",
+                    "DSharp min.mp3", "E maj.mp3",
+                    "E min.mp3", "F maj.mp3",
+                    "F min.mp3", "FSharp maj.mp3",
+                    "FSharp min.mp3",
+                    "G maj.mp3", "G min.mp3",
+                    "GSharp maj.mp3", "GSharp min.mp3"
+                ];
     var met_buffer;
     var chordsBuffer = [];
     var chordsName = [];
@@ -12,12 +24,12 @@ $(document).ready(function(){
     const audioContext = new AudioContext();
     
     var first = false;
-    $.get("php/getChords.php", function(data){
-        chordsName = jQuery.parseJSON(data);
-        $.each(chordsName, function(index,val){
-                var btn_name = val;
+
+    // $.get("php/getChords.php", function(data){
+    //     chordsName = jQuery.parseJSON(data);
+        $.each(urls, function(index, val){
                 var request = new XMLHttpRequest();
-                            request.open('get', folder+ btn_name,true);
+                            request.open('get', folder+ val,true);
                             request.responseType = 'arraybuffer';
                             request.onload = function(){
                                 audioContext.decodeAudioData(request.response, function(buffer){
@@ -28,6 +40,7 @@ $(document).ready(function(){
                             }
                             request.send();
                 //Button stuffs
+                var btn_name = val;
                 btn_name = btn_name.substring(0,btn_name.length -4);
                 var btn = document.createElement("BUTTON");
                 btn_display_name = btn_name.replace("Sharp", "#");
@@ -39,7 +52,6 @@ $(document).ready(function(){
                 btn.id = btn_name;
                 // $("#NotesContainer").appendChild(btn);
                  $("#NotesContainer").append(btn);
-            })
     });
     
     $("#metronome_btn").click(function(){
@@ -114,29 +126,29 @@ $(document).ready(function(){
         $("button.song.btn-primary").each(function(){
             currentNotes.push(this.id + ".mp3");
         });
-        
             var bufferSelected = [];
             var namesSelected = [];
-            currentNotes.forEach(function(val){
-            var i = chordsName.indexOf(val);
-                bufferSelected.push(chordsBuffer[i]);
-                namesSelected.push(chordsName[i]);
+            $.each(currentNotes,function(index, value){
+                // var i = chordsName.indexOf(value);
+                bufferSelected.push(chordsBuffer[index]);
+                namesSelected.push(value);
             })
             var rand = Math.floor(Math.random() * Math.floor(bufferSelected.length));
             audioSource.buffer = bufferSelected[rand];
+
             if (namesSelected.length > 0){
                 var text = namesSelected[rand];
-                text = text.substring(0,text.length -4);
-                text = text.replace("Sharp", "#");
-                text = text.replace("maj", "major");
-                text = text.replace("min", "minor");
-                $("#current_note").text(text);
+                    text = text.substring(0,text.length -4);
+                    text = text.replace("Sharp", "#");
+                    text = text.replace("maj", "major");
+                    text = text.replace("min", "minor");
+                    $("#current_note").text(text);
+                
             } else {
                 $("#current_note").text("");
             }
             audioSource.connect(audioContext.destination);
             audioSource.start(currtime);
-    
     }
 
     //Handles Visual adding notes to the note queue
