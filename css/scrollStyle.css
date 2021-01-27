@@ -1,0 +1,37 @@
+#About-me{
+    margin-top: 100px;
+    background-color: white;
+    border-bottom: black;
+}
+.page-footer .fa{
+    color:white;
+    position: relative;
+    top: 0;
+    transition: 0.5s;
+    font-size: x-large;
+}
+.page-footer .fa:hover{
+    top: -5px;
+    color:white;
+}
+/* .page-footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+
+} */
+#footer-name{
+    font-size: x-large;
+    color: white;
+}
+#intro::first-line{
+    font-size: larger;
+}
+.badge.project-type{
+    background-color:blue ;
+    color: white;
+}
+i{
+    color: #292b2c;
+}
